@@ -14,7 +14,11 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 // XTODO: images
 // TODO: assets/publicPath
 // TODO: Linting
-// TODO: CSS minification
+// TODO: tree shaking
+// TODO: source maps dev vs. prod
+// xTODO: splitting main/vendor code
+// XTODO: hashing prod files
+// XTODO: CSS minification
 // XTODO: minification – uglify? babel minify?
 
 /**
@@ -51,6 +55,10 @@ let config = {
   entry: './src/js/index.js',
   output: {
     path: path.resolve(__dirname, 'build'),
+    filename: '[name].[chunkhash].js',
+  },
+  devServer: {
+    contentBase: './build'
   },
   module: {
     rules: [
@@ -70,7 +78,19 @@ let config = {
   },
   plugins: [
     new HtmlWebpackPlugin({ template: './src/index.html' })
-  ]
+  ],
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        }
+      }
+    }
+  }
 };
 
 export default (env, argv) => {
@@ -94,9 +114,9 @@ export default (env, argv) => {
           new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: 'style.[contenthash].css',
+            filename: '[name].[contenthash].css',
           }),
-        ]
+        ],
       });
 
   return mergedConfig;
