@@ -7,7 +7,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 // XTODO: clean
-// TODO: Webpack dev server
+// XTODO: Webpack dev server
 // TODO: Hot module reloading
 // TODO: React/Vue
 // XTODO: fonts
@@ -15,11 +15,13 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 // TODO: assets/publicPath
 // TODO: Linting
 // TODO: tree shaking
-// TODO: source maps dev vs. prod
+// TODO: source maps prod?
+// xTODO: source maps dev
 // xTODO: splitting main/vendor code
 // XTODO: hashing prod files
 // XTODO: CSS minification
 // XTODO: minification – uglify? babel minify?
+// TODO: client/server set up version (separate config)
 
 /**
  * Returns the styling rule configuration for the rules array. Depends on what mode the webpack
@@ -28,7 +30,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 const cssRule = (mode) => {
   var loaders = [];
 
-  loaders.push(mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader);
+  loaders.push(mode !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader);
   loaders.push('css-loader');
   if (mode === 'production') loaders.push({
     loader: 'postcss-loader',
@@ -53,6 +55,7 @@ const cssRule = (mode) => {
 
 let config = {
   entry: './src/js/index.js',
+  mode: 'development',
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].[chunkhash].js',
@@ -94,7 +97,7 @@ let config = {
 };
 
 export default (env, argv) => {
-  let mergedConfig = argv.mode === 'development'
+  let mergedConfig = argv.mode !== 'production'
     ? merge(config, {
         devtool: 'source-map',
         module: {

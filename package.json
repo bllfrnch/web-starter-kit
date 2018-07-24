@@ -2,14 +2,14 @@
   "name": "wp-exp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development",
     "start": "webpack-dev-server --open",
     "build": "webpack --mode production"
   },
-  "author": "",
+  "author": "Bill French <bllfrnch@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^9.0.1",
