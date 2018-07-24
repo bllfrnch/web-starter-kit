@@ -1,14 +1,15 @@
-import path from 'path';
+import autoprefixer from 'autoprefixer';
 import merge from 'webpack-merge';
+import path from 'path';
+import CleanWebpackPlugin from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import autoprefixer from 'autoprefixer';
 
-// TODO: postcss/autoprefixer
 // TODO: clean
 // TODO: Webpack dev server
 // TODO: Hot module reloading
 // TODO: React/Vue
+// TODO: fonts
 // TODO: images/assets/publicPath
 // TODO: Linting
 // TODO: minification – ugligy? babel minify?
@@ -48,6 +49,14 @@ let config = {
       {
         test: /\.(js)$/,
         use: 'babel-loader'
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: 'file-loader'
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: 'file-loader'
       }
     ]
   },
@@ -73,11 +82,12 @@ export default (env, argv) => {
           ],
         },
         plugins: [
+          new CleanWebpackPlugin(['build']),
           new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
             filename: 'style.[contenthash].css',
-          })
+          }),
         ]
       });
 
