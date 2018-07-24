@@ -6,15 +6,28 @@ import CleanWebpackPlugin from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
+/**
+ * FEATURES
+ * ============================
+ * GLOBAL
+ * ============================
+ * DEVELOPMENT
+ * ============================
+ * PRODUCTION
+ * ============================
+ */
+
 // XTODO: clean
 // XTODO: Webpack dev server
-// TODO: Hot module reloading
+// TODO: Hot module reloading <= this might be useful in a really big codebase, but my code is small
+// and my modules are broken out across several chunks, so currently this seems like more trouble
+// than it's worth.
 // TODO: React/Vue
 // XTODO: fonts
 // XTODO: images
 // TODO: assets/publicPath
 // TODO: Linting
-// TODO: tree shaking
+// xTODO: tree shaking is accomplished by setting the sideEffects property in package.json.
 // TODO: source maps prod?
 // xTODO: source maps dev
 // xTODO: splitting main/vendor code
@@ -22,6 +35,9 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 // XTODO: CSS minification
 // XTODO: minification – uglify? babel minify?
 // TODO: client/server set up version (separate config)
+// TODO: Polyfills for promises, array functions
+
+
 
 /**
  * Returns the styling rule configuration for the rules array. Depends on what mode the webpack
@@ -61,13 +77,16 @@ let config = {
     filename: '[name].[chunkhash].js',
   },
   devServer: {
-    contentBase: './build'
+    contentBase: './build',
   },
   module: {
     rules: [
       {
         test: /\.(js)$/,
-        use: 'babel-loader'
+        use: [
+          'babel-loader',
+          'eslint-loader',
+        ],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
@@ -104,7 +123,10 @@ export default (env, argv) => {
           rules: [
             cssRule(argv.mode)
           ]
-        }
+        },
+        plugins: [
+          // new webpack.HotModuleReplacementPlugin()
+        ]
       })
     : merge(config, {
         module: {

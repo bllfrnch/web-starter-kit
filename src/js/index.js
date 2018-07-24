@@ -1,9 +1,10 @@
-import _ from 'lodash';
-import _arr from './fun';
+import _map from 'lodash/map';
 import '../scss/index.scss';
 
-_([]);
+console.log(
+  _map([234, 234, 23, 324], i => {
+    console.log(i);
+  })
+);
 
-console.log('Up and running', _arr([1, 3, 3 , 554]));
-
-document.querySelector('body').innerHTML = 'hello world!';
+document.querySelector('body').innerHTML = 'hello world oh mine!';

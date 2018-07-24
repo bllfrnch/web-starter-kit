@@ -1,3 +1,3 @@
-import _ from 'lodash';
-
-export default arr => _(arr);
+console.log('whatever');
+export default [];
+// export default arr => _(arr);
