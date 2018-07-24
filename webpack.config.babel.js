@@ -2,8 +2,10 @@ import path from 'path';
 import merge from 'webpack-merge';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import autoprefixer from 'autoprefixer';
 
 // TODO: postcss/autoprefixer
+// TODO: clean
 // TODO: Webpack dev server
 // TODO: Hot module reloading
 // TODO: React/Vue
@@ -16,15 +18,25 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
  * is being called with.
  */
 const cssRule = (mode) => {
+  var loaders = [];
+
+  loaders.push(mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader);
+  loaders.push('css-loader');
+  if (mode === 'production') loaders.push({
+    loader: 'postcss-loader',
+    options: {
+      plugins: () => autoprefixer({
+        browsers: ['last 2 versions', '> 1%']
+      })
+    }
+  });
+  loaders.push('sass-loader');
+
   return {
     test: /\.s?css$/,
-    use: [
-      // creates style nodes from JS strings
-      mode !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
-      'css-loader', // translates CSS into CommonJS
-      'sass-loader' // compiles Sass to CSS
-    ]};
-}
+    use: loaders,
+  };
+};
 
 let config = {
   entry: './src/js/index.js',
