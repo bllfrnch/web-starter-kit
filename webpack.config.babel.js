@@ -1,18 +1,21 @@
 import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
 import merge from 'webpack-merge';
 import path from 'path';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-// TODO: clean
+// XTODO: clean
 // TODO: Webpack dev server
 // TODO: Hot module reloading
 // TODO: React/Vue
-// TODO: fonts
-// TODO: images/assets/publicPath
+// XTODO: fonts
+// XTODO: images
+// TODO: assets/publicPath
 // TODO: Linting
-// TODO: minification – ugligy? babel minify?
+// TODO: CSS minification
+// XTODO: minification – uglify? babel minify?
 
 /**
  * Returns the styling rule configuration for the rules array. Depends on what mode the webpack
@@ -26,9 +29,14 @@ const cssRule = (mode) => {
   if (mode === 'production') loaders.push({
     loader: 'postcss-loader',
     options: {
-      plugins: () => autoprefixer({
-        browsers: ['last 2 versions', '> 1%']
-      })
+      plugins: [
+        cssnano({
+          preset: 'default'
+        }),
+        autoprefixer({
+          browsers: ['last 2 versions', '> 1%']
+        })
+      ]
     }
   });
   loaders.push('sass-loader');
